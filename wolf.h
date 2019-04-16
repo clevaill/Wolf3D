@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/12 12:38:14 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/15 19:09:18 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define DISTANCE (int)((WIDTH / 2) / tan(FOV_RAD / 2))
 # define RAY_ANGLE ((double)FOV / WIDTH)
 # define CONS SIZE * DISTANCE
+# define SHADE(x) (SIZE << 2) / x
 
 typedef struct		s_coord
 {
@@ -51,7 +52,7 @@ typedef struct		s_player
 
 typedef struct		s_block
 {
-	char			type; //0 = r; 1 = wall; 2 = door; 3 = secret
+	char			type;
 	char			texture;
 }					t_block;
 
@@ -65,7 +66,7 @@ typedef struct		s_map
 typedef struct		s_texture
 {
 	void			*img_ptr;
-	char			*img_adr;
+	unsigned int	*img_adr;
 	int				bpp;
 	int				sl;
 	int				endian;
@@ -79,7 +80,7 @@ typedef struct		s_wolf
 	void			*mlx_ptr;
 	void			*win_ptr;
 	void			*img_ptr;
-	char			*img_adr;
+	unsigned int	*img_adr;
 	int				bpp;
 	int				sl;
 	int				endian;
@@ -88,6 +89,7 @@ typedef struct		s_wolf
 	t_texture		**tex;
 }					t_wolf;
 
+/*
 typedef struct		s_ray
 {
 	unsigned int	x;
@@ -95,20 +97,21 @@ typedef struct		s_ray
 	char			vh;
 
 }					t_ray;
+*/
 
 /*
 ** RAY
 */
 
 //void			img_pixel_put(t_wolf *tab, int x, int y, int c);
-void				cast_ray(t_wolf *tab, double angle, int i);
+void				cast_ray(t_wolf *tab, double angle, int x);
 void				display(t_wolf *tab);
 
 /*
 ** KEYS
 */
 
-//int				mouse_move(int x, int y, t_wolf *tab);
+int					mouse_move(int x, int y, t_wolf *tab);
 int					key_hook(int keycode, t_wolf *tab);
 int					key_pressed_esc(t_wolf *tab);
 void				key_pressed_del(t_wolf *tab);
@@ -130,9 +133,9 @@ t_map				*map_init(char *arg);
 ** TEXTURE
 */
 
+int					shading(int color, double shade);
 t_texture			**parse_textures(t_wolf *tab);
 t_texture			*texture_init(t_wolf *tab, char *file, unsigned char id);
-void				texturise_wall(t_wolf *tab, int *to, int *fr, char id);
-//void				texturise_wall(t_wolf *tab, int offset, int x, int y, int y2, char id);
+void				texturise_wall(t_wolf *tab, int x, int y, int color);
 
 #endif

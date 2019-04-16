@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:59:29 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/12 12:04:30 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/15 19:35:36 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ char	**quick_parse(char *arg, int *x, int *y)
 		}
 		i++;
 	}
+	free(file);
 	return (res);
 }
 
@@ -143,6 +144,7 @@ t_map	*map_init(char *arg)
 	char	**tmp;
 	int		x;
 	int		y;
+	int		i;
 
 	if (!(map = (t_map *)malloc(sizeof(t_map))))
 		return (0);
@@ -152,9 +154,9 @@ t_map	*map_init(char *arg)
 	map->width = x;
 	map->height = y;
 	map->grid = quick_grid(tmp, x, y);
-	//ft_putnbr(x);
-	//write(1, "\n", 1);
-	//ft_putnbr(y);
-	//write(1, "\n", 1);
+	i = -1;
+	while(tmp[++i])
+		free(tmp[i]);
+	free(tmp);
 	return (map);
 }

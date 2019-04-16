@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 17:28:44 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/08 12:43:30 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/15 18:24:16 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,13 @@ int		key_hook(int keycode, t_wolf *tab)
 		key_pressed_r(tab);
 	else if (keycode == 3)
 		key_pressed_f(tab);
-//	else
-		//ft_putnbr(keycode);
 	return (keycode);
 }
 
 void	key_pressed_del(t_wolf *tab)
 {
 	mlx_clear_window(tab->mlx_ptr, tab->win_ptr);
-	ft_bzero(tab->img_adr, WIDTH * HEIGHT * (tab->bpp >> 3));
+	ft_bzero(tab->img_adr, WIDTH * HEIGHT);
 }
 
 int		key_pressed_esc(t_wolf *tab)
@@ -57,9 +55,23 @@ int		key_pressed_esc(t_wolf *tab)
 /*
 int	mouse_move(int x, int y, t_wolf *tab)
 {
-	display(tab);
-	mlx_string_put(tab->mlx_ptr, tab->win_ptr, WIDTH - 100, 30, 0xFFFFFF, ft_itoa(x));
-	mlx_string_put(tab->mlx_ptr, tab->win_ptr, WIDTH - 100, 50, 0xFFFFFF, ft_itoa(y));
+	int u;
+	int v;
+
+	u = tab->x - x;;
+	v = tab->y - y;
+	if (u > 0 && x < (WIDTH >> 1))
+		key_pressed_larrow(tab);
+	else if (u < 0 && x > (WIDTH >> 1))
+		key_pressed_rarrow(tab);
+	//if (v > 0)
+	//	key_pressed_r(tab);
+	//else
+	//	key_pressed_f(tab);
+	tab->x = x;
+	tab->y = y;
+	//mlx_string_put(tab->mlx_ptr, tab->win_ptr, WIDTH - 100, 30, 0xFFFFFF, ft_itoa(x));
+	//mlx_string_put(tab->mlx_ptr, tab->win_ptr, WIDTH - 100, 50, 0xFFFFFF, ft_itoa(y));
 	return (0);
 }
 */

@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 15:30:32 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/10 15:25:50 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/12 14:15:54 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	key_pressed_darrow(t_wolf *tab)
 		tab->player->pos_y += sin(RAD(tab->player->pov)) * tab->player->speed;
 		display(tab);
 	}
-	//display(tab);
 }
 
 void	key_pressed_uarrow(t_wolf *tab)

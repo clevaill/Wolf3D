@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:33:32 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/12 12:46:56 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/15 19:09:40 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,10 @@
 
 static void		img_pixel_put(t_wolf *tab, int x, int y, int c)
 {
-	int i;
-	int cons;
-
 	if (x >= 0 && x < WIDTH)
 	{
 		if (y >= 0 && y < HEIGHT)
-		{
-			cons = (tab->bpp >> 3);
-			i = 0;
-			while (i < cons)
-			{
-				tab->img_adr[x * cons + (y * tab->sl) + i] = c & 255;
-				i++;
-				c = c >> 8;
-			}
-		}
+			tab->img_adr[x + y * tab->sl] = c;
 	}
 }
 
@@ -46,8 +34,7 @@ static t_coord	*horizontal_checking(t_wolf *tab, double a, t_coord *res)
 		y = (tab->player->pos_y / SIZE) * SIZE - 1;
 	x = (tab->player->pos_x + (tab->player->pos_y - y) / tan(RAD(a)));
 	ya = a > 180.0 ? SIZE : -SIZE;
-	xa = (SIZE / tan(RAD(a)));
-	a > 180 ? xa = -xa : 0;
+	xa = a > 180.0 ? -(SIZE / tan(RAD(a))) : (SIZE / tan(RAD(a)));
 	while ((x >= 0 && x < tab->map->width * SIZE)
 		&& (y >= 0 && y < tab->map->height * SIZE)
 		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
@@ -73,8 +60,7 @@ static t_coord	*vertical_checking(t_wolf *tab, double a, t_coord *res)
 		x = (tab->player->pos_x / SIZE + 1) * SIZE;
 	y = (tab->player->pos_y + (tab->player->pos_x - x) * tan(RAD(a)));
 	xa = (a >= 90.0 && a <= 270.0) ? -SIZE : SIZE;
-	ya = (SIZE * tan(RAD(a)));
-	a < 90 || a > 270 ? ya = -ya : 0;
+	ya = a < 90.0 || a > 270.0 ? -(SIZE * tan(RAD(a))) : (SIZE * tan(RAD(a)));
 	while ((x >= 0 && x < tab->map->width * SIZE)
 		&& (y >= 0 && y < tab->map->height * SIZE)
 		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
@@ -87,36 +73,34 @@ static t_coord	*vertical_checking(t_wolf *tab, double a, t_coord *res)
 	return (res);
 }
 
-static void		slice(t_wolf *tab, int i, double dist, int offset, char id)
+static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 {
-	int		p;
-	int		to[2];
-	int		from[2];
-	int		y;
-	int		top;
+	int			p;
+	int			y;
+	int			top;
+	double		shade;
 
 	p = (int)(CONS / dist);
 	top = ((HEIGHT - p) / (tab->player->crouch ? 1.4 : 2)) + tab->player->look;
-	to[0] = i;
-	from[0] = offset;
 	y = -1;
 	while (++y < top)
-		img_pixel_put(tab, i, y, 0x7ADDF6);
+		img_pixel_put(tab, x, y, 0x7ADDF6); //ceiling texture
 	while (y < top + p)
 	{
-		to[1] = y;
-		from[1] = ((y - top) * tab->tex[id]->height) / p;
-		texturise_wall(tab, to, from, id);
+		(shade = SHADE(dist)) > 1 ? shade = 1 : 0;
+		texturise_wall(tab, x, y, shading(tab->tex[id]->img_adr[offset
+		+ (((y - top) * tab->tex[id]->height) / p) * tab->tex[id]->sl], shade));
 		y++;
 	}
 	while (y < HEIGHT)
 	{
-		img_pixel_put(tab, i, y, 0x909090);
+		//floor texture
+		img_pixel_put(tab, x, y, 0x909090);
 		y++;
 	}
 }
 
-void			cast_ray(t_wolf *tab, double a, int i)
+void			cast_ray(t_wolf *tab, double a, int x)
 {
 	double	d_v;
 	double	d_h;
@@ -125,76 +109,16 @@ void			cast_ray(t_wolf *tab, double a, int i)
 
 	vertical_checking(tab, a, &v);
 	horizontal_checking(tab, a, &h);
-	d_v = sqrt(pow(v.x - tab->player->pos_x, 2) +
-		pow(v.y - tab->player->pos_y, 2));
-	d_h = sqrt(pow(h.x - tab->player->pos_x, 2) +
-		pow(h.y - tab->player->pos_y, 2));
+	d_v = sqrt((v.x - tab->player->pos_x) * (v.x - tab->player->pos_x) +
+		(v.y - tab->player->pos_y) * (v.y - tab->player->pos_y))
+		* cos(RAD((a - tab->player->pov)));
+	d_h = sqrt((h.x - tab->player->pos_x) * (h.x - tab->player->pos_x) +
+		(h.y - tab->player->pos_y) * (h.y - tab->player->pos_y))
+		* cos(RAD((a - tab->player->pov)));
 	if (d_v < d_h)
-		slice(tab, i, d_v * cos(RAD((a - tab->player->pov))), (int)v.y % SIZE,
+		slice(tab, x, d_v, (int)v.y % SIZE,
 		tab->map->grid[(int)v.y / SIZE][(int)v.x / SIZE]->type - '0');
 	else
-		slice(tab, i, d_h * cos(RAD((a - tab->player->pov))), (int)h.x % SIZE,
+		slice(tab, x, d_h, (int)h.x % SIZE,
 		tab->map->grid[(int)h.y / SIZE][(int)h.x / SIZE]->type - '0');
 }
-
-/*
-static t_coord	*horizontal_checking(t_wolf *tab, double a)
-{
-	double		x;
-	double		y;
-	double		xa;
-	double		ya;
-	t_coord	*res;
-
-	if (!(res = (t_coord *)malloc(sizeof(t_coord))))
-		return (0);
-	if (a > 180.0)
-		y = (tab->player->pos_y / SIZE + 1) * SIZE;
-	else
-		y = (tab->player->pos_y / SIZE) * SIZE - 1;
-	x = (tab->player->pos_x + (tab->player->pos_y - y) / tan(RAD(a)));
-	ya = a > 180.0 ? SIZE : -SIZE;
-	xa = (SIZE / tan(RAD(a)));
-	a > 180 ? xa = -xa : 0;
-	while ((x >= 0 && x < tab->map->width * SIZE)
-		&& (y >= 0 && y < tab->map->height * SIZE)
-		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
-	{
-		x += xa;
-		y += ya;
-	}
-	res->x = x;
-	res->y = y;
-	return (res);
-}
-
-static t_coord	*vertical_checking(t_wolf *tab, double a)
-{
-	double		x;
-	double		y;
-	double		xa;
-	double		ya;
-	t_coord	*res;
-
-	if (!(res = (t_coord *)malloc(sizeof(t_coord))))
-		return (0);
-	if (a >= 90.0 && a <= 270.0)
-		x = (tab->player->pos_x / SIZE) * SIZE - 1;
-	else
-		x = (tab->player->pos_x / SIZE + 1) * SIZE;
-	y = (tab->player->pos_y + (tab->player->pos_x - x) * tan(RAD(a)));
-	xa = (a >= 90.0 && a <= 270.0) ? -SIZE : SIZE;
-	ya = (SIZE * tan(RAD(a)));
-	a < 90 || a > 270 ? ya = -ya : 0;
-	while ((x >= 0 && x < tab->map->width * SIZE)
-		&& (y >= 0 && y < tab->map->height * SIZE)
-		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
-	{
-		x += xa;
-		y += ya;
-	}
-	res->x = x;
-	res->y = y;
-	return (res);
-}
-*/
