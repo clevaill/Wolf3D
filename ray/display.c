@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 13:29:40 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/15 19:40:08 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/16 16:48:39 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void		display(t_wolf *tab)
 		angle >= 360.0 ? angle -= 360.0 : 0;
 	}
 	mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->img_ptr, 0, 0);
+	mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->tex[10]->img_ptr, WIDTH >> 1, HEIGHT - 256);
 	/*mlx_string_put(tab->mlx_ptr, tab->win_ptr, 10, 10, 0xFFFFFF, ft_itoa(tab->player->pov));
 	mlx_string_put(tab->mlx_ptr, tab->win_ptr, 10, 30, 0xFFFFFF, ft_itoa(tab->player->pos_x));
 	mlx_string_put(tab->mlx_ptr, tab->win_ptr, 10, 50, 0xFFFFFF, ft_itoa(tab->player->pos_y));

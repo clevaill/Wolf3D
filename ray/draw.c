@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:33:32 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/15 19:09:40 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/16 16:23:21 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 	int			y;
 	int			top;
 	double		shade;
+	double		lumos;
 
 	p = (int)(CONS / dist);
 	top = ((HEIGHT - p) / (tab->player->crouch ? 1.4 : 2)) + tab->player->look;
@@ -88,8 +89,9 @@ static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 	while (y < top + p)
 	{
 		(shade = SHADE(dist)) > 1 ? shade = 1 : 0;
-		texturise_wall(tab, x, y, shading(tab->tex[id]->img_adr[offset
-		+ (((y - top) * tab->tex[id]->height) / p) * tab->tex[id]->sl], shade));
+		(lumos = LIGHT(dist)) > 1 ? lumos = 0 : 0;
+		texturise_wall(tab, x, y, light(shading(tab->tex[id]->img_adr[(offset
+		+ (((y - top) * tab->tex[id]->height) / p) * tab->tex[id]->sl)], shade), lumos));
 		y++;
 	}
 	while (y < HEIGHT)

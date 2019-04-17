@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/15 19:09:18 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/16 15:45:24 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define RAY_ANGLE ((double)FOV / WIDTH)
 # define CONS SIZE * DISTANCE
 # define SHADE(x) (SIZE << 2) / x
+# define LIGHT(x) (SIZE >> 2) / x
 
 typedef struct		s_coord
 {
@@ -90,16 +91,6 @@ typedef struct		s_wolf
 }					t_wolf;
 
 /*
-typedef struct		s_ray
-{
-	unsigned int	x;
-	unsigned int	y;
-	char			vh;
-
-}					t_ray;
-*/
-
-/*
 ** RAY
 */
 
@@ -133,6 +124,7 @@ t_map				*map_init(char *arg);
 ** TEXTURE
 */
 
+int					light(int color, double lumos);
 int					shading(int color, double shade);
 t_texture			**parse_textures(t_wolf *tab);
 t_texture			*texture_init(t_wolf *tab, char *file, unsigned char id);

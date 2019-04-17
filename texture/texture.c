@@ -6,11 +6,29 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 19:53:34 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/15 18:56:00 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/16 16:47:54 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../wolf.h"
+
+int			light(int color, double lumos)
+{
+	int r = 255;
+	int g = 127;
+	int b = 31;
+	int res;
+
+
+	if (!lumos)
+		return (color);
+	res = (int)((color & 0xff) + lumos * (b - (color & 0xff)));
+	res += (int)((color >> 8 & 0xff) + lumos * (g - (color >> 8 & 0xff))) << 8;
+	res += (int)((color >> 16 & 0xff) + lumos * (r - (color >> 16 & 0xff))) << 16;
+	return (res);
+	//return ((int)(lumos * (color & 0xff)) + ((int)((lumos / 2)
+	//	* (color >> 8 & 0xff)) << 8) + ((int)((lumos / 8) * (color >> 16 & 0xff)) << 16));
+}
 
 int			shading(int color, double shade)
 {
@@ -27,11 +45,6 @@ void		texturise_wall(t_wolf *tab, int x, int y, int color)
 		if (y >= 0 && y < HEIGHT)
 			tab->img_adr[x + y * tab->sl] = color;
 	}
-}
-
-static void		texturise_floor_ceilling(t_wolf *tab, int x, int y, int color)
-{
-	
 }
 
 t_texture	*texture_init(t_wolf *tab, char *file, unsigned char id)
@@ -54,9 +67,9 @@ t_texture	**parse_textures(t_wolf *tab)
 {
 	t_texture **res;
 
-	if (!(res = (t_texture **)malloc(sizeof(t_texture *) * 10)))
+	if (!(res = (t_texture **)malloc(sizeof(t_texture *) * 12)))
 		return (0);
-	res[9] = 0;
+	res[11] = 0;
 	res[0] = texture_init(tab, "texture/wall/purplestone.xpm", 0);
 	res[1] = texture_init(tab, "texture/wall/wood.xpm", 1);
 	res[2] = texture_init(tab, "texture/wall/redbrick.xpm", 2);
@@ -66,5 +79,8 @@ t_texture	**parse_textures(t_wolf *tab)
 	res[6] = texture_init(tab, "texture/wall/eagle.xpm", 6);
 	res[7] = texture_init(tab, "texture/wall/greystone.xpm", 7);
 	res[8] = texture_init(tab, "texture/wall/mossy.xpm", 8);
+	//items//
+	res[9] = texture_init(tab, "texture/wall/jagpistol.xpm", 9);
+	res[10] = texture_init(tab, "texture/wall/torchmw.xpm", 10);
 	return (res);
 }
