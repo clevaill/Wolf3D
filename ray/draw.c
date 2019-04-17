@@ -12,15 +12,6 @@
 
 #include "../wolf.h"
 
-static void		img_pixel_put(t_wolf *tab, int x, int y, int c)
-{
-	if (x >= 0 && x < WIDTH)
-	{
-		if (y >= 0 && y < HEIGHT)
-			tab->img_adr[x + y * tab->sl] = c;
-	}
-}
-
 static t_coord	*horizontal_checking(t_wolf *tab, double a, t_coord *res)
 {
 	double		x;
@@ -85,7 +76,7 @@ static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 	top = ((HEIGHT - p) / (tab->player->crouch ? 1.4 : 2)) + tab->player->look;
 	y = -1;
 	while (++y < top)
-		img_pixel_put(tab, x, y, 0x7ADDF6); //ceiling texture
+		texturise_floor_ceiling(tab, x, y, 0x7ADDF6); //ceiling texture
 	while (y < top + p)
 	{
 		(shade = SHADE(dist)) > 1 ? shade = 1 : 0;
@@ -97,7 +88,7 @@ static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 	while (y < HEIGHT)
 	{
 		//floor texture
-		img_pixel_put(tab, x, y, 0x909090);
+		texturise_floor_ceiling(tab, x, y, 0x909090);
 		y++;
 	}
 }

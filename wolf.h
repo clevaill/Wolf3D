@@ -94,7 +94,7 @@ typedef struct		s_wolf
 ** RAY
 */
 
-//void			img_pixel_put(t_wolf *tab, int x, int y, int c);
+//void				img_pixel_put(t_wolf *tab, int x, int y, int c);
 void				cast_ray(t_wolf *tab, double angle, int x);
 void				display(t_wolf *tab);
 
@@ -129,5 +129,7 @@ int					shading(int color, double shade);
 t_texture			**parse_textures(t_wolf *tab);
 t_texture			*texture_init(t_wolf *tab, char *file, unsigned char id);
 void				texturise_wall(t_wolf *tab, int x, int y, int color);
+t_texture			**parse_textures2(t_wolf *tab);
+void				texturise_floor_ceiling(t_wolf *tab, int x, int y, int color);
 
 #endif
