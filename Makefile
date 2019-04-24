@@ -17,7 +17,7 @@ CC = gcc
 FLAGS = -Wall -Werror -Wextra
 
 SRCS = main.c hooks/key_hook.c hooks/move.c hooks/move2.c parse/parse.c ray/display.c ray/draw.c \
-		texture/texture.c texture/texture_floor_ceiling.c
+		texture/texture.c
 
 OBJECT = $(SRCS:.c=.o)
 

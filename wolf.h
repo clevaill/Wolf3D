@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/16 15:45:24 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/24 13:45:38 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,11 @@
 # include "mlx.h"
 
 # define BUFF_SIZE 4096
-# define WIDTH 1600//1440//
-# define HEIGHT 900//810/
-# define RAD(angleInDegrees) ((angleInDegrees) * (M_PI / 180.0))
-# define DEG(angleInRadians) ((angleInRadians) * (180.0 / M_PI))
-# define ANGLE(x) (int)(x < 0 ? 360.0 + x : x)
+# define WIDTH 1440//1600//
+# define HEIGHT 810//900//
 # define SIZE 64
 # define FOV 60
-# define FOV_RAD RAD(FOV)
-# define DISTANCE (int)((WIDTH / 2) / tan(FOV_RAD / 2))
 # define RAY_ANGLE ((double)FOV / WIDTH)
-# define CONS SIZE * DISTANCE
-# define SHADE(x) (SIZE << 2) / x
-# define LIGHT(x) (SIZE >> 2) / x
 
 typedef struct		s_coord
 {
@@ -78,23 +70,28 @@ typedef struct		s_texture
 
 typedef struct		s_wolf
 {
+
+	t_player		*player;
+	t_map			*map;
+	t_texture		**tex;
 	void			*mlx_ptr;
 	void			*win_ptr;
 	void			*img_ptr;
 	unsigned int	*img_adr;
+	double			fov_rad;
+	int				cons;
 	int				bpp;
 	int				sl;
 	int				endian;
-	t_player		*player;
-	t_map			*map;
-	t_texture		**tex;
+	char			pause;
 }					t_wolf;
 
 /*
 ** RAY
 */
 
-//void				img_pixel_put(t_wolf *tab, int x, int y, int c);
+//void			img_pixel_put(t_wolf *tab, int x, int y, int c);
+double				rad(double angle);
 void				cast_ray(t_wolf *tab, double angle, int x);
 void				display(t_wolf *tab);
 
@@ -105,7 +102,6 @@ void				display(t_wolf *tab);
 int					mouse_move(int x, int y, t_wolf *tab);
 int					key_hook(int keycode, t_wolf *tab);
 int					key_pressed_esc(t_wolf *tab);
-void				key_pressed_del(t_wolf *tab);
 void				key_pressed_larrow(t_wolf *tab);
 void				key_pressed_rarrow(t_wolf *tab);
 void				key_pressed_uarrow(t_wolf *tab);
@@ -124,12 +120,10 @@ t_map				*map_init(char *arg);
 ** TEXTURE
 */
 
-int					light(int color, double lumos);
-int					shading(int color, double shade);
+int					light(int color, double dist);
+int					shading(int color, double dist);
 t_texture			**parse_textures(t_wolf *tab);
 t_texture			*texture_init(t_wolf *tab, char *file, unsigned char id);
 void				texturise_wall(t_wolf *tab, int x, int y, int color);
-t_texture			**parse_textures2(t_wolf *tab);
-void				texturise_floor_ceiling(t_wolf *tab, int x, int y, int color);
 
 #endif

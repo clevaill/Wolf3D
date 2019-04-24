@@ -6,13 +6,12 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 17:20:45 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/15 18:54:48 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/24 13:17:33 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-#include <stdio.h>
 static int		wolf_usage(int r)
 {
 	ft_putendl("usage: ./wolf <map>");
@@ -47,6 +46,9 @@ static t_wolf	*tab_init(t_map *map)
 	tab->img_adr = (unsigned int *)mlx_get_data_addr(tab->img_ptr,
 	&(tab->bpp), &(tab->sl), &(tab->endian));
 	tab->sl = tab->sl >> 2;
+	tab->pause = 0;
+	tab->fov_rad = rad(FOV);
+	tab->cons = SIZE * (int)((WIDTH / 2) / tan(tab->fov_rad / 2));
 	tab->player = player_init(5, 5, 0);
 	tab->map = map;
 	tab->tex = parse_textures(tab);

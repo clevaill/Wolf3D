@@ -6,33 +6,31 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 19:53:34 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/16 16:47:54 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/24 12:56:34 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../wolf.h"
 
-int			light(int color, double lumos)
+int			light(int color, double dist)
 {
-	int r = 255;
-	int g = 127;
-	int b = 31;
-	int res;
+	double lumos;
 
-
-	if (!lumos)
+	lumos = (SIZE >> 1) / dist;
+	lumos > 0.30 ? lumos = 0.30 : 0;
+	if (lumos < 0.01)
 		return (color);
-	res = (int)((color & 0xff) + lumos * (b - (color & 0xff)));
-	res += (int)((color >> 8 & 0xff) + lumos * (g - (color >> 8 & 0xff))) << 8;
-	res += (int)((color >> 16 & 0xff) + lumos * (r - (color >> 16 & 0xff))) << 16;
-	return (res);
-	//return ((int)(lumos * (color & 0xff)) + ((int)((lumos / 2)
-	//	* (color >> 8 & 0xff)) << 8) + ((int)((lumos / 8) * (color >> 16 & 0xff)) << 16));
+	return((int)((color & 0xff) + lumos * (31 - (color & 0xff)))
+	+ ((int)((color >> 8 & 0xff) + lumos * (127 - (color >> 8 & 0xff))) << 8)
+	+ ((int)((color >> 16 & 0xff) + lumos * (255 - (color >> 16 & 0xff))) << 16));
 }
 
-int			shading(int color, double shade)
+int			shading(int color, double dist)
 {
-	if (shade == 1.0)
+	double shade;
+
+	shade = (SIZE << 2) / dist;
+	if (shade > 1)
 		return (color);
 	return ((int)(shade * (color & 0xff)) + ((int)(shade
 		* (color >> 8 & 0xff)) << 8) + ((int)(shade * (color >> 16 & 0xff)) << 16));
@@ -67,10 +65,11 @@ t_texture	**parse_textures(t_wolf *tab)
 {
 	t_texture **res;
 
-	if (!(res = (t_texture **)malloc(sizeof(t_texture *) * 12)))
+	if (!(res = (t_texture **)malloc(sizeof(t_texture *) * 14)))
 		return (0);
-	res[11] = 0;
-	res[0] = texture_init(tab, "texture/wall/purplestone.xpm", 0);
+	res[13] = 0;
+	//walls//
+	res[0] = texture_init(tab, "texture/wall/void.xpm", 0);
 	res[1] = texture_init(tab, "texture/wall/wood.xpm", 1);
 	res[2] = texture_init(tab, "texture/wall/redbrick.xpm", 2);
 	res[3] = texture_init(tab, "texture/wall/bluestone.xpm", 3);
@@ -79,8 +78,10 @@ t_texture	**parse_textures(t_wolf *tab)
 	res[6] = texture_init(tab, "texture/wall/eagle.xpm", 6);
 	res[7] = texture_init(tab, "texture/wall/greystone.xpm", 7);
 	res[8] = texture_init(tab, "texture/wall/mossy.xpm", 8);
-	//items//
-	res[9] = texture_init(tab, "texture/wall/jagpistol.xpm", 9);
-	res[10] = texture_init(tab, "texture/wall/torchmw.xpm", 10);
+	//sprites//
+	res[9] = texture_init(tab, "texture/sprites/jagpistol.xpm", 9);
+	res[10] = texture_init(tab, "texture/sprites/shotgun.xpm", 10);
+	res[11] = texture_init(tab, "texture/sprites/pause.xpm", 11);
+	res[12] = texture_init(tab, "texture/sprites/credit.xpm", 12);
 	return (res);
 }
