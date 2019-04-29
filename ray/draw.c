@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:33:32 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/24 13:09:05 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/27 17:03:29 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static t_coord	*horizontal_checking(t_wolf *tab, double a, t_coord *res)
 	xa = a > 180.0 ? -(SIZE / tan(rad(a))) : (SIZE / tan(rad(a)));
 	while ((x >= 0 && x < tab->map->width * SIZE)
 		&& (y >= 0 && y < tab->map->height * SIZE)
-		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
+		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)].type == 0)
 	{
 		x += xa;
 		y += ya;
@@ -63,7 +63,7 @@ static t_coord	*vertical_checking(t_wolf *tab, double a, t_coord *res)
 	ya = a < 90.0 || a > 270.0 ? -(SIZE * tan(rad(a))) : (SIZE * tan(rad(a)));
 	while ((x >= 0 && x < tab->map->width * SIZE)
 		&& (y >= 0 && y < tab->map->height * SIZE)
-		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)]->type == '0')
+		&& tab->map->grid[(int)(y / SIZE)][(int)(x / SIZE)].type == 0)
 	{
 		x += xa;
 		y += ya;
@@ -104,6 +104,7 @@ void			cast_ray(t_wolf *tab, double a, int x)
 	double	d_h;
 	t_coord	v;
 	t_coord	h;
+	int		id;
 
 	vertical_checking(tab, a, &v);
 	horizontal_checking(tab, a, &h);
@@ -114,9 +115,19 @@ void			cast_ray(t_wolf *tab, double a, int x)
 		(h.y - tab->player->pos_y) * (h.y - tab->player->pos_y))
 		* cos(rad((a - tab->player->pov)));
 	if (d_v < d_h)
-		slice(tab, x, d_v, (int)v.y % SIZE,
-		tab->map->grid[(int)v.y / SIZE][(int)v.x / SIZE]->type - '0');
+	{
+		if (a >= 90 && a <= 270)
+			id = tab->map->grid[(int)v.y / SIZE][(int)v.x / SIZE].east;
+		else
+			id = tab->map->grid[(int)v.y / SIZE][(int)v.x / SIZE].west;
+		slice(tab, x, d_v, (int)v.y % SIZE, id);
+	}
 	else
-		slice(tab, x, d_h, (int)h.x % SIZE,
-		tab->map->grid[(int)h.y / SIZE][(int)h.x / SIZE]->type - '0');
+	{
+		if (a >= 180)
+			id = tab->map->grid[(int)h.y / SIZE][(int)h.x / SIZE].north;
+		else
+			id = tab->map->grid[(int)h.y / SIZE][(int)h.x / SIZE].south;
+		slice(tab, x, d_h, (int)h.x % SIZE, id);
+	}
 }

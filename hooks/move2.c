@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 15:03:23 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/05 15:03:37 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/24 17:23:33 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,11 @@ void	key_pressed_f(t_wolf *tab)
 void	key_pressed_r(t_wolf *tab)
 {
 	tab->player->look += 10;
+	display(tab);
+}
+
+void	key_pressed_q(t_wolf *tab)
+{
+	tab->swtch = 1;
 	display(tab);
 }

@@ -6,7 +6,7 @@
 #    By: akrache <akrache@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 17:35:15 by akrache           #+#    #+#              #
-#    Updated: 2019/04/12 15:44:09 by akrache          ###   ########.fr        #
+#    Updated: 2019/04/27 18:53:55 by akrache          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC = gcc
 FLAGS = -Wall -Werror -Wextra
 
 SRCS = main.c hooks/key_hook.c hooks/move.c hooks/move2.c parse/parse.c ray/display.c ray/draw.c \
-		texture/texture.c
+		texture/texture.c parse/check.c
 
 OBJECT = $(SRCS:.c=.o)
 

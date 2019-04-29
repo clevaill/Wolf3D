@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/24 13:45:38 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/27 19:38:41 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include "mlx.h"
 
 # define BUFF_SIZE 4096
-# define WIDTH 1440//1600//
-# define HEIGHT 810//900//
+# define WIDTH 1440
+# define HEIGHT 810
 # define SIZE 64
 # define FOV 60
 # define RAY_ANGLE ((double)FOV / WIDTH)
@@ -30,31 +30,6 @@ typedef struct		s_coord
 	double			x;
 	double			y;
 }					t_coord;
-
-typedef struct		s_player
-{
-	int				pos_x;
-	int				pos_y;
-	int				height;
-	int				pov;
-	int				turn;
-	int				speed;
-	int				look;
-	char			crouch;
-}					t_player;
-
-typedef struct		s_block
-{
-	char			type;
-	char			texture;
-}					t_block;
-
-typedef struct		s_map
-{
-	int				width;
-	int				height;
-	t_block			***grid;
-}					t_map;
 
 typedef struct		s_texture
 {
@@ -67,6 +42,37 @@ typedef struct		s_texture
 	int				height;
 	unsigned char	id;
 }					t_texture;
+
+typedef struct		s_player
+{
+	t_texture		*hand;
+	int				pos_x;
+	int				pos_y;
+	int				height;
+	int				pov;
+	int				turn;
+	int				speed;
+	int				look;
+	char			crouch;
+}					t_player;
+
+typedef struct		s_block
+{
+	int				type;
+	int				north;
+	int				east;
+	int				south;
+	int				west;
+	int				floor;
+	int				ceil;
+}					t_block;
+
+typedef struct		s_map
+{
+	int				width;
+	int				height;
+	t_block			**grid;
+}					t_map;
 
 typedef struct		s_wolf
 {
@@ -84,13 +90,13 @@ typedef struct		s_wolf
 	int				sl;
 	int				endian;
 	char			pause;
+	char			swtch;
 }					t_wolf;
 
 /*
 ** RAY
 */
 
-//void			img_pixel_put(t_wolf *tab, int x, int y, int c);
 double				rad(double angle);
 void				cast_ray(t_wolf *tab, double angle, int x);
 void				display(t_wolf *tab);
@@ -109,12 +115,15 @@ void				key_pressed_darrow(t_wolf *tab);
 void				key_pressed_crouch(t_wolf *tab);
 void				key_pressed_r(t_wolf *tab);
 void				key_pressed_f(t_wolf *tab);
+void				key_pressed_q(t_wolf *tab);
 
 /*
 ** PARSING
 */
 
-t_map				*map_init(char *arg);
+t_map				*parsing(char *arg);
+int					checking(char *arg, char **file);
+int					fl_strlen(char *str);
 
 /*
 ** TEXTURE
