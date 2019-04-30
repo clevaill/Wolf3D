@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 19:53:34 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 19:37:40 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 20:45:38 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int			light(int color, double dist)
 	lux > 0.30 ? lux = 0.30 : 0;
 	if (lux < 0.01)
 		return (color);
-	return ((int)((color & 255) + lux * (31 - (color & 255)))
-	+ ((int)((color >> 8 & 255) + lux * (127 - (color >> 8 & 255))) << 8)
-	+ ((int)((color >> 16 & 255) + lux * (255 - (color >> 16 & 255))) << 16));
+	return ((int)((color & 255) + lux * (229 - (color & 255)))
+	+ ((int)((color >> 8 & 255) + lux * (229 - (color >> 8 & 255))) << 8)
+	+ ((int)((color >> 16 & 255) + lux * (182 - (color >> 16 & 255))) << 16));
 }
 
 int			shading(int color, double dist)
@@ -45,29 +45,26 @@ void		texturise_wall(t_wolf *tab, int x, int y, int color)
 	}
 }
 
-t_texture	*texture_init(t_wolf *tab, char *file, unsigned char id)
+t_texture	texture_init(t_wolf *tab, char *file, unsigned char id)
 {
-	t_texture *t;
+	t_texture t;
 
-	if (!(t = (t_texture *)malloc(sizeof(t_texture))))
-		return (0);
-	if (!(t->img_ptr = mlx_xpm_file_to_image(tab->mlx_ptr,
-		file, &(t->width), &(t->height))))
-		return (0);
-	t->img_adr = (unsigned int *)mlx_get_data_addr(t->img_ptr,
-		&(t->bpp), &(t->sl), &(t->endian));
-	t->id = id;
-	t->sl = t->sl >> 2;
+	t.img_ptr = mlx_xpm_file_to_image(tab->mlx_ptr,
+		file, &(t.width), &(t.height));
+	t.img_adr = (unsigned int *)mlx_get_data_addr(t.img_ptr,
+		&(t.bpp), &(t.sl), &(t.endian));
+	t.id = id;
+	t.sl = t.sl >> 2;
 	return (t);
 }
 
-t_texture	**parse_textures(t_wolf *tab)
+t_texture	*parse_textures(t_wolf *tab)
 {
-	t_texture **res;
+	t_texture	*res;
 
-	if (!(res = (t_texture **)malloc(sizeof(t_texture *) * 14)))
+	tab->nb_tex = 13;
+	if (!(res = (t_texture *)malloc(sizeof(t_texture) * tab->nb_tex)))
 		return (0);
-	res[13] = 0;
 	res[0] = texture_init(tab, "texture/wall/void.xpm", 0);
 	res[1] = texture_init(tab, "texture/wall/wood.xpm", 1);
 	res[2] = texture_init(tab, "texture/wall/redbrick.xpm", 2);
@@ -78,7 +75,7 @@ t_texture	**parse_textures(t_wolf *tab)
 	res[7] = texture_init(tab, "texture/wall/greystone.xpm", 7);
 	res[8] = texture_init(tab, "texture/wall/mossy.xpm", 8);
 	res[9] = texture_init(tab, "texture/sprites/jagpistol.xpm", 9);
-	res[10] = texture_init(tab, "texture/sprites/shotgun.xpm", 10);
+	res[10] = texture_init(tab, "texture/sprites/hand.xpm", 10);
 	res[11] = texture_init(tab, "texture/sprites/pause.xpm", 11);
 	res[12] = texture_init(tab, "texture/sprites/credit.xpm", 12);
 	return (res);

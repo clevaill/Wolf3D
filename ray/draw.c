@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:33:32 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 17:03:29 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 14:50:20 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ static void		slice(t_wolf *tab, int x, double dist, int offset, int id)
 		img_pixel_put(tab, x, y, 0x404040); //ceiling texture
 	while (y < top + p)
 	{
-		texturise_wall(tab, x, y, light(shading(tab->tex[id]->img_adr[(offset
-		+ (((y - top) * tab->tex[id]->height) / p) * tab->tex[id]->sl)], dist), dist));
+		texturise_wall(tab, x, y, light(shading(tab->tex[id].img_adr[(offset
+		+ (((y - top) * tab->tex[id].height) / p) * tab->tex[id].sl)], dist), dist));
 		y++;
 	}
 	while (y < HEIGHT)

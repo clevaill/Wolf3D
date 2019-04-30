@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:59:29 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 19:02:15 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 20:43:38 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int				fill_grid(t_map *map, char *file)
 	while (++i < map->height)
 	{
 		if (!(map->grid[i] = (t_block *)malloc(sizeof(t_block) * map->width)))
-			return (0);//freeee
+			return ((int)free_grid(map, i));
 		j = -1;
 		while (++j < map->width)
 		{
@@ -109,12 +109,19 @@ t_map			*parsing(char *arg)
 	if (!(map = (t_map *)malloc(sizeof(t_map))))
 		return (0);
 	file = 0;
+	map->grid = 0;
 	if (!(map->height = checking(arg, &file)))
-		return (0);//freeeee
+		return (free_map(map));
 	map->width = fl_strlen(file);
 	if (!(map->grid = (t_block **)malloc(sizeof(t_block *) * map->height)))
-		return (0);//freeeee
+	{
+		free_file(file);
+		return (free_map(map));
+	}
 	if (!(fill_grid(map, file)))
-		return (0);//freeeee
+	{
+		free_file(file);
+		return (free_map(map));
+	}
 	return (map);
 }

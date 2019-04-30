@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 17:28:44 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 19:03:24 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 18:07:24 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 int		key_pressed_esc(t_wolf *tab)
 {
-	mlx_destroy_image(tab->mlx_ptr, tab->img_ptr);
-	mlx_destroy_window(tab->mlx_ptr, tab->win_ptr);
-	free(tab->mlx_ptr);
-	free(tab);
+	free_wolf(tab);
 	exit(0);
 }
 

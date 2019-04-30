@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 13:29:40 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 16:56:36 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 14:51:24 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ static void	display_sprites(t_wolf *tab)
 	//if (tab->swtch)
 	//	switch_hand(tab);
 	//if (tab->player->hand)
-	mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->player->hand->img_ptr, WIDTH >> 1, HEIGHT - tab->player->hand->height);
+	mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->player->hand.img_ptr, (WIDTH + tab->player->hand.width) >> 1, HEIGHT - tab->player->hand.height);
 	if (tab->pause)
 	{
-		mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->tex[11]->img_ptr, (WIDTH >> 1) - (tab->tex[11]->width >> 1), (HEIGHT >> 1) - (tab->tex[11]->height >> 1));
-		mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->tex[12]->img_ptr, (WIDTH >> 1) - (tab->tex[12]->width >> 1), (HEIGHT) - (tab->tex[12]->height));
+		mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->tex[11].img_ptr, (WIDTH >> 1) - (tab->tex[11].width >> 1), (HEIGHT >> 1) - (tab->tex[11].height >> 1));
+		mlx_put_image_to_window(tab->mlx_ptr, tab->win_ptr, tab->tex[12].img_ptr, (WIDTH >> 1) - (tab->tex[12].width >> 1), (HEIGHT) - (tab->tex[12].height));
 	}
 	mlx_string_put(tab->mlx_ptr, tab->win_ptr, 10, 10, 0xFFFFFF, ft_itoa(tab->player->pov));//
 }

@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/27 19:38:41 by akrache          ###   ########.fr       */
+/*   Updated: 2019/04/29 20:43:26 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define SIZE 64
 # define FOV 60
 # define RAY_ANGLE ((double)FOV / WIDTH)
+# define BL 0xb6e5e5//
+# define OL 0xff7f1f//
 
 typedef struct		s_coord
 {
@@ -45,7 +47,7 @@ typedef struct		s_texture
 
 typedef struct		s_player
 {
-	t_texture		*hand;
+	t_texture		hand;
 	int				pos_x;
 	int				pos_y;
 	int				height;
@@ -79,7 +81,7 @@ typedef struct		s_wolf
 
 	t_player		*player;
 	t_map			*map;
-	t_texture		**tex;
+	t_texture		*tex;
 	void			*mlx_ptr;
 	void			*win_ptr;
 	void			*img_ptr;
@@ -89,6 +91,7 @@ typedef struct		s_wolf
 	int				bpp;
 	int				sl;
 	int				endian;
+	int				nb_tex;
 	char			pause;
 	char			swtch;
 }					t_wolf;
@@ -131,8 +134,19 @@ int					fl_strlen(char *str);
 
 int					light(int color, double dist);
 int					shading(int color, double dist);
-t_texture			**parse_textures(t_wolf *tab);
-t_texture			*texture_init(t_wolf *tab, char *file, unsigned char id);
+t_texture			*parse_textures(t_wolf *tab);
+t_texture			texture_init(t_wolf *tab, char *file, unsigned char id);
 void				texturise_wall(t_wolf *tab, int x, int y, int color);
+
+/*
+** ERROR
+*/
+
+void				*free_file(char *str);
+void				*free_player(t_player *player);
+void				*free_grid(t_map *map, int height);
+void				*free_map(t_map *map);
+void				*free_tex(t_wolf *tab, t_texture *tex);
+void				*free_wolf(t_wolf *tab);
 
 #endif
