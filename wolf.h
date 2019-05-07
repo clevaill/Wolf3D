@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:31:51 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 20:43:26 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/03 12:06:37 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@
 # define HEIGHT 810
 # define SIZE 64
 # define FOV 60
+# define TEX_MAX 13
 # define RAY_ANGLE ((double)FOV / WIDTH)
-# define BL 0xb6e5e5//
-# define OL 0xff7f1f//
 
 typedef struct		s_coord
 {
@@ -91,9 +90,8 @@ typedef struct		s_wolf
 	int				bpp;
 	int				sl;
 	int				endian;
-	int				nb_tex;
+	int				offset;
 	char			pause;
-	char			swtch;
 }					t_wolf;
 
 /*
@@ -101,6 +99,7 @@ typedef struct		s_wolf
 */
 
 double				rad(double angle);
+int					get_id(t_wolf *tab, double a, t_coord v, int verti);
 void				cast_ray(t_wolf *tab, double angle, int x);
 void				display(t_wolf *tab);
 
@@ -118,7 +117,9 @@ void				key_pressed_darrow(t_wolf *tab);
 void				key_pressed_crouch(t_wolf *tab);
 void				key_pressed_r(t_wolf *tab);
 void				key_pressed_f(t_wolf *tab);
-void				key_pressed_q(t_wolf *tab);
+void				key_pressed_space(t_wolf *tab);
+void				key_pressed_lstrafe(t_wolf *tab);
+void				key_pressed_rstrafe(t_wolf *tab);
 
 /*
 ** PARSING
@@ -146,7 +147,7 @@ void				*free_file(char *str);
 void				*free_player(t_player *player);
 void				*free_grid(t_map *map, int height);
 void				*free_map(t_map *map);
-void				*free_tex(t_wolf *tab, t_texture *tex);
+void				*free_tex(t_wolf *tab);
 void				*free_wolf(t_wolf *tab);
 
 #endif

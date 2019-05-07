@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:59:29 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 20:43:38 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/02 19:54:20 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int		w_atoi(char *str, int *i)
 	int	res;
 
 	res = 0;
-	if (str[*i] == '{')
+	if (str[*i] == '{' || str[*i] == ',')
 		(*i)++;
 	while (ft_isdigit(str[*i]))
 	{
@@ -25,17 +25,15 @@ static int		w_atoi(char *str, int *i)
 		res += (str[*i] - '0');
 		(*i)++;
 	}
-	if (str[*i] == '}')
-		(*i)++;
 	if (str[*i] == ',')
 		(*i)++;
-	return (res);
+	return (res >= TEX_MAX ? 1 : res);
 }
 
 static t_block	init_cardi(char *file, int *i)
 {
 	t_block		res;
-	
+
 	if (!(res.north = w_atoi(file, i)))
 		res.type = 0;
 	else
@@ -43,6 +41,10 @@ static t_block	init_cardi(char *file, int *i)
 	res.east = w_atoi(file, i);
 	res.south = w_atoi(file, i);
 	res.west = w_atoi(file, i);
+	while (file[*i] != '}')
+		(*i)++;
+	if (file[*i] == '}')
+		(*i)++;
 	if (file[*i] != ' ')
 		res.floor = w_atoi(file, i);
 	else
@@ -57,7 +59,7 @@ static t_block	init_cardi(char *file, int *i)
 static t_block	init_block(char *file, int *i)
 {
 	t_block		res;
-	
+
 	if (file[*i] == '{')
 		return (init_cardi(file, i));
 	if (!(res.north = w_atoi(file, i)))
@@ -83,7 +85,7 @@ int				fill_grid(t_map *map, char *file)
 	int	i;
 	int	j;
 	int	index;
-	
+
 	i = -1;
 	index = 0;
 	while (++i < map->height)
@@ -123,5 +125,6 @@ t_map			*parsing(char *arg)
 		free_file(file);
 		return (free_map(map));
 	}
+	free_file(file);
 	return (map);
 }

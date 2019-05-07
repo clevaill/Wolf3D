@@ -6,27 +6,11 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 17:20:45 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 20:45:04 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/02 20:14:06 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-/*
-void	*malloc(size_t n)
-{
-	static int i;
-
-	i++;
-	printf("i = %i\n", i);
-	if (i != 19)
-	{
-		return valloc(n);
-	}
-	else
-	{
-		return (NULL);
-	}
-}*/
 
 static int		wolf_usage(int r)
 {
@@ -39,18 +23,18 @@ void			pos_init(t_wolf *tab, t_player *res)
 	int i;
 	int j;
 
-	i = 0;
+	i = 1;
 	res->pos_x = 0;
 	res->pos_y = 0;
-	while (i < tab->map->height)
+	while (i < tab->map->height - 1)
 	{
-		j = 0;
-		while (j < tab->map->width)
+		j = 1;
+		while (j < tab->map->width - 1)
 		{
 			if (tab->map->grid[i][j].type == 0)
 			{
-				res->pos_x = i * SIZE + (SIZE >> 1);
-				res->pos_y = j * SIZE + (SIZE >> 1);
+				res->pos_y = i * SIZE + (SIZE >> 1);
+				res->pos_x = j * SIZE + (SIZE >> 1);
 				return ;
 			}
 			j++;
@@ -62,7 +46,6 @@ void			pos_init(t_wolf *tab, t_player *res)
 t_player		*player_init(t_wolf *tab, double pov)
 {
 	t_player	*res;
-
 
 	if (!(res = (t_player *)malloc(sizeof(t_player))))
 		return (0);
@@ -92,7 +75,6 @@ static t_wolf	*tab_init(t_map *map)
 	&(tab->bpp), &(tab->sl), &(tab->endian));
 	tab->sl = tab->sl >> 2;
 	tab->pause = 0;
-	tab->swtch = 0;
 	tab->fov_rad = rad(FOV);
 	tab->cons = SIZE * (int)((WIDTH / 2) / tan(tab->fov_rad / 2));
 	tab->map = map;

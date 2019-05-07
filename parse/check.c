@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/27 18:50:04 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 17:38:22 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/02 18:07:28 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char			*readfile(char *arg)
 	char	buf[BUFF_SIZE + 1];
 	int		fd;
 
-	if ((fd = open(arg, O_RDONLY)) == -1)
+	if ((fd = open(arg, O_RDONLY | O_NOFOLLOW)) == -1 || ft_strstr(arg, "/dev"))
 		return (0);
 	i = (int)read(fd, buf, BUFF_SIZE);
 	if (i == -1)

@@ -6,7 +6,7 @@
 #    By: akrache <akrache@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 15:30:18 by akrache           #+#    #+#              #
-#    Updated: 2019/03/27 17:42:03 by akrache          ###   ########.fr        #
+#    Updated: 2019/05/02 20:43:22 by akrache          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ $(NAME): $(OBJS)
 		@ar -rc $(NAME) $(OBJS)
 		@ranlib $(NAME)
 
-%.o: %.c
+%.o: %.c libft.h
 		@echo "$(CLEAR_LINE)"
 		@echo "Compiling $<\r\c"
 		@$(CC) $(CFLAGS) -c $< -o $@

@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:59:25 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 20:44:42 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/02 20:06:28 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,21 @@ void	*free_map(t_map *map)
 	return (0);
 }
 
-void	*free_tex(t_wolf *tab, t_texture *tex)
+void	*free_tex(t_wolf *tab)
 {
-	if (tex)
+	int	i;
+
+	if (tab->tex)
 	{
-		mlx_destroy_image(tab->mlx_ptr, tex->img_ptr);
-		free(tex);
-		tex = 0;
+		i = 0;
+		while (i < TEX_MAX)
+		{
+			mlx_destroy_image(tab->mlx_ptr, tab->tex[i].img_ptr);
+			tab->tex[i].img_ptr = 0;
+			i++;
+		}
+		free(tab->tex);
+		tab->tex = 0;
 	}
 	return (0);
 }
@@ -67,10 +75,9 @@ void	*free_wolf(t_wolf *tab)
 		if (tab->map)
 			free_map(tab->map);
 		if (tab->tex)
-			free_tex(tab, tab->tex);
+			free_tex(tab);
 		mlx_destroy_image(tab->mlx_ptr, tab->img_ptr);
 		mlx_destroy_window(tab->mlx_ptr, tab->win_ptr);
-		free(tab->mlx_ptr);
 		free(tab);
 		tab = 0;
 	}

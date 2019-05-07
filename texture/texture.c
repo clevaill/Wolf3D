@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 19:53:34 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 20:45:38 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/02 17:49:44 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ t_texture	*parse_textures(t_wolf *tab)
 {
 	t_texture	*res;
 
-	tab->nb_tex = 13;
-	if (!(res = (t_texture *)malloc(sizeof(t_texture) * tab->nb_tex)))
+	if (!(res = (t_texture *)malloc(sizeof(t_texture) * TEX_MAX)))
 		return (0);
 	res[0] = texture_init(tab, "texture/wall/void.xpm", 0);
 	res[1] = texture_init(tab, "texture/wall/wood.xpm", 1);
@@ -74,7 +73,7 @@ t_texture	*parse_textures(t_wolf *tab)
 	res[6] = texture_init(tab, "texture/wall/eagle.xpm", 6);
 	res[7] = texture_init(tab, "texture/wall/greystone.xpm", 7);
 	res[8] = texture_init(tab, "texture/wall/mossy.xpm", 8);
-	res[9] = texture_init(tab, "texture/sprites/jagpistol.xpm", 9);
+	res[9] = texture_init(tab, "texture/sprites/shotgun.xpm", 9);
 	res[10] = texture_init(tab, "texture/sprites/hand.xpm", 10);
 	res[11] = texture_init(tab, "texture/sprites/pause.xpm", 11);
 	res[12] = texture_init(tab, "texture/sprites/credit.xpm", 12);

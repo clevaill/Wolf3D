@@ -6,7 +6,7 @@
 /*   By: akrache <akrache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 17:28:44 by akrache           #+#    #+#             */
-/*   Updated: 2019/04/29 18:07:24 by akrache          ###   ########.fr       */
+/*   Updated: 2019/05/03 12:06:21 by akrache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ void	key_pressed_enter(t_wolf *tab)
 	else
 		tab->pause = 1;
 	display(tab);
+}
+
+void	key_hook2(int keycode, t_wolf *tab)
+{
+	if (keycode == 3)
+		key_pressed_f(tab);
+	else if (keycode == 49)
+		key_pressed_space(tab);
+	else if (keycode == 12)
+		key_pressed_lstrafe(tab);
+	else if (keycode == 14)
+		key_pressed_rstrafe(tab);
 }
 
 int		key_hook(int keycode, t_wolf *tab)
@@ -47,10 +59,9 @@ int		key_hook(int keycode, t_wolf *tab)
 			key_pressed_crouch(tab);
 		else if (keycode == 15)
 			key_pressed_r(tab);
-		else if (keycode == 3)
-			key_pressed_f(tab);
-		else if (keycode == 12)
-			key_pressed_q(tab);
+		else
+			key_hook2(keycode, tab);
+		display(tab);
 	}
 	return (keycode);
 }
